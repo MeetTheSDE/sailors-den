@@ -82,11 +82,7 @@ const menuData: MenuSection[] = [
             { name: "Paneer Masala Grilled Sandwich", price: "$3.00" },
         ],
     },
-    {
-        id: "panini",
-        label: "Panini",
-        items: [],
-    },
+    { id: "panini", label: "Panini", items: [] },
     {
         id: "pizza",
         label: "Pizza",
@@ -184,8 +180,7 @@ const sections = [
 
 export default function App() {
     const [activeSection, setActiveSection] = useState("hot-beverages");
-    const [showHeader, setShowHeader] = useState(true);
-    const [lastScrollY, setLastScrollY] = useState(0);
+    const [isScrolled, setIsScrolled] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
     const sectionsRef = useRef<{ [key: string]: HTMLElement }>({});
 
@@ -193,27 +188,20 @@ export default function App() {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
 
-            // Show Ship Wheel if scrolled down more than 400px
+            // Show Ship Wheel button
             setShowBackToTop(currentScrollY > 400);
 
-            // Show header if scrolling up or at the very top
-            if (currentScrollY < 50) {
-                setShowHeader(true);
-            } else if (Math.abs(currentScrollY - lastScrollY) > 5) {
-                // Threshold for "accidental" tiny scrolls
-                if (currentScrollY > lastScrollY) {
-                    setShowHeader(false); // Scrolling Down
-                } else {
-                    setShowHeader(true); // Scrolling Up
-                }
+            // Toggle the banner appearance (e.g., after 120px)
+            if (currentScrollY > 120) {
+                setIsScrolled(true);
+            } else {
+                setIsScrolled(false);
             }
-
-            setLastScrollY(currentScrollY);
         };
 
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
-    }, [lastScrollY]);
+    }, []);
 
     useEffect(() => {
         const observerOptions = {
@@ -244,7 +232,8 @@ export default function App() {
     const scrollToSection = (id: string) => {
         const section = sectionsRef.current[id];
         if (section) {
-            const navHeight = 80;
+            // Adjust navHeight based on banner height (approx 120px when banner is active)
+            const navHeight = isScrolled ? 110 : 80;
             const elementPosition = section.getBoundingClientRect().top;
             const offsetPosition =
                 elementPosition + window.pageYOffset - navHeight;
@@ -265,36 +254,30 @@ export default function App() {
 
     return (
         <div className="min-h-screen bg-[#f5f1e8]">
-            {/* duration-300 = Faster response
-               ease-out = Snappy start, tapers off quickly
-            */}
-            <header
-                className="sticky top-0 z-50 bg-[#f5f1e8]/95 backdrop-blur-sm transition-transform duration-300 ease-out border-b border-[#8b6f47]/20"
-                style={{
-                    transform: showHeader
-                        ? "translateY(0)"
-                        : "translateY(-180px)",
-                }}
-            >
-                <div className="max-w-4xl mx-auto px-4 py-3 text-center">
-                    <div className="flex flex-col items-center gap-3">
-                        <button
-                            onClick={scrollToTop}
-                            className="w-30 h-30 flex items-center justify-center text-5xl cursor-pointer hover:scale-105 transition-transform"
-                            aria-label="Back to top"
-                        >
-                            <img src="/logo.svg" alt="Sailor's Den" />
-                        </button>
-
-                        <h3
-                            onClick={scrollToTop}
-                            className="text-2xl font-serif text-[#5c4a3a] cursor-pointer"
-                        >
-                            Sailor's Den
-                        </h3>
+            {/* --- 1. LOGO AREA (Only the Image scrolls away) --- */}
+            <div className="max-w-4xl mx-auto px-4 pt-1 text-center">
+                <div className="flex flex-col items-center gap-3">
+                    <div className="w-30 h-30 flex items-center justify-center">
+                        <img src="/logo.svg" alt="Logo" className="w-30 h-30" />
                     </div>
                 </div>
+            </div>
 
+            {/* --- 2. STICKY HEADER (Contains the Title + Nav) --- */}
+            <header className="sticky top-0 z-50 bg-[#f5f1e8]/95 backdrop-blur-sm border-b border-[#8b6f47]/20">
+                {/* THE NAME: This starts below the logo but stays when it hits the top */}
+                <div className="flex justify-center items-center py-3 transition-all duration-300">
+                    <h1
+                        onClick={scrollToTop}
+                        className={`font-serif text-[#5c4a3a] cursor-pointer transition-all duration-300 ${
+                            isScrolled ? "text-2xl" : "text-4xl"
+                        }`}
+                    >
+                        Sailor's Den
+                    </h1>
+                </div>
+
+                {/* NAVBAR: Stays pinned right below the name */}
                 <div className="bg-[#f5f1e8]">
                     <SectionNav
                         sections={sections}
@@ -304,6 +287,7 @@ export default function App() {
                 </div>
             </header>
 
+            {/* --- 3. MAIN MENU --- */}
             <main className="max-w-4xl mx-auto px-4 py-8 pb-20">
                 {menuData.map((section) => (
                     <section
@@ -312,7 +296,7 @@ export default function App() {
                         ref={(el) => {
                             if (el) sectionsRef.current[section.id] = el;
                         }}
-                        className="mb-16 scroll-mt-20"
+                        className="mb-16 scroll-mt-28"
                     >
                         <h2 className="text-3xl font-serif text-[#5c4a3a] mb-8 text-center">
                             {section.label}
@@ -363,52 +347,30 @@ export default function App() {
                 ))}
             </main>
 
-            {/* Footer */}
-
             <footer className="border-t-2 border-[#c9b8a3]/50 bg-gradient-to-b from-[#f5f1e8] to-[#ebe5d8] py-12">
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="text-center space-y-6">
-                        {/* Tagline with icons */}
-
                         <div className="flex items-center justify-center gap-3 text-2xl mb-6">
                             <span className="text-3xl">☕</span>
-
                             <p className="text-lg text-[#6d5a47] italic font-serif">
                                 Where every sip tells a story, every bite feels
                                 like home
                             </p>
-
                             <span className="text-3xl">🥖</span>
                         </div>
-
-                        {/* Decorative divider */}
-
                         <div className="flex items-center justify-center gap-4 my-8">
                             <div className="h-px w-20 bg-gradient-to-r from-transparent to-[#8b6f47]/30"></div>
-
                             <h3 className="text-2xl font-serif text-[#5c4a3a]">
                                 Sailor's Den
                             </h3>
-
                             <div className="h-px w-20 bg-gradient-to-l from-transparent to-[#8b6f47]/30"></div>
                         </div>
-
-                        {/* Contact Info */}
-
                         <div className="space-y-2 text-[#7d6b5a]">
                             <p className="text-base">
                                 123 Harbor Street, Coastal Bay, CB 12345
                             </p>
-
                             <p className="text-base">📞 (555) 123-4567</p>
-                            {/* 
-                            <p className="text-base">
-                                ✉️ hello@sailorsden.cafe
-                            </p> */}
                         </div>
-
-                        {/* Opening Hours */}
-
                         <div className="mt-6 pt-6 border-t border-[#c9b8a3]/30">
                             <p className="text-sm text-[#8b6f47]">
                                 Open Daily • 7:00 AM - 8:00 PM
@@ -428,7 +390,6 @@ export default function App() {
                 }`}
                 aria-label="Scroll to top"
             >
-                {/* Ship Wheel SVG */}
                 <svg
                     className="w-8 h-8 transition-transform duration-700 hover:rotate-180"
                     viewBox="0 0 24 24"
