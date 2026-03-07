@@ -233,7 +233,7 @@ export default function App() {
         const section = sectionsRef.current[id];
         if (section) {
             // Adjust navHeight based on banner height (approx 120px when banner is active)
-            const navHeight = isScrolled ? 110 : 80;
+            const navHeight = isScrolled ? 120 : 129;
             const elementPosition = section.getBoundingClientRect().top;
             const offsetPosition =
                 elementPosition + window.pageYOffset - navHeight;
