@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { MenuItem } from "./components/MenuItem";
+import { Imagebox } from "./components/ImageBox";
 import { SectionNav } from "./components/SectionNav";
 
 // --- Interfaces ---
@@ -7,6 +8,7 @@ interface MenuItemData {
     name: string;
     price: string;
     description?: string;
+    image: string;
 }
 
 interface MenuSubCategory {
@@ -28,27 +30,51 @@ const menuData: MenuSection[] = [
     {
         id: "hot-beverages",
         label: "Hot Beverages",
-        items: [{ name: "Hot Chocolate", price: "$3.00" }],
+        items: [{ name: "Hot Chocolate", price: "$3.00", image: "abc.png" }],
         subcategories: [
             {
                 title: "Espresso",
                 items: [
-                    { name: "Doppio", price: "$3.00" },
-                    { name: "Lungo", price: "$3.00" },
-                    { name: "Ristretto", price: "$3.00" },
-                    { name: "Cafe Americano", price: "$3.00" },
+                    { name: "Doppio", price: "$3.00", image: "abc.png" },
+                    { name: "Lungo", price: "$3.00", image: "abc.png" },
+                    { name: "Ristretto", price: "$3.00", image: "abc.png" },
+                    {
+                        name: "Cafe Americano",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
                 ],
             },
             {
                 title: "Latte",
                 items: [
-                    { name: "Cafe Latte", price: "$3.00" },
-                    { name: "Pistachio Latte", price: "$3.00" },
-                    { name: "Caramel Brulee Latte", price: "$3.00" },
-                    { name: "Gingerbread Latte", price: "$3.00" },
-                    { name: "Vanilla Latte", price: "$3.00" },
-                    { name: "Cinnamon Dolce Latte", price: "$3.00" },
-                    { name: "Pumpkin Spice Latte", price: "$3.00" },
+                    { name: "Cafe Latte", price: "$3.00", image: "abc.png" },
+                    {
+                        name: "Pistachio Latte",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
+                    {
+                        name: "Caramel Brulee Latte",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
+                    {
+                        name: "Gingerbread Latte",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
+                    { name: "Vanilla Latte", price: "$3.00", image: "abc.png" },
+                    {
+                        name: "Cinnamon Dolce Latte",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
+                    {
+                        name: "Pumpkin Spice Latte",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
                 ],
             },
         ],
@@ -57,7 +83,13 @@ const menuData: MenuSection[] = [
         id: "cold-beverages",
         label: "Cold Beverages",
         note: "Everything in hot can be made iced",
-        items: [{ name: "Strawberry Matcha Latte", price: "$3.00" }],
+        items: [
+            {
+                name: "Strawberry Matcha Latte",
+                price: "$3.00",
+                image: "abc.png",
+            },
+        ],
     },
     {
         id: "appetizer",
@@ -67,19 +99,40 @@ const menuData: MenuSection[] = [
                 name: "Homemade Salsa",
                 price: "$3.00",
                 description: "served with chips",
+                image: "abc.png",
             },
-            { name: "Spicy Queso (Cheese) Nachos", price: "$3.00" },
-            { name: "Veg Loaded Nachos", price: "$3.00" },
+            {
+                name: "Spicy Queso (Cheese) Nachos",
+                price: "$3.00",
+                image: "abc.png",
+            },
+            { name: "Veg Loaded Nachos", price: "$3.00", image: "abc.png" },
         ],
     },
     {
         id: "sandwich",
         label: "Sandwich",
         items: [
-            { name: "Cheese Grilled Sandwich", price: "$3.00" },
-            { name: "Double Cheese Grilled Sandwich", price: "$3.00" },
-            { name: "Veg Cheese Grilled Sandwich", price: "$3.00" },
-            { name: "Paneer Masala Grilled Sandwich", price: "$3.00" },
+            {
+                name: "Cheese Grilled Sandwich",
+                price: "$3.00",
+                image: "abc.png",
+            },
+            {
+                name: "Double Cheese Grilled Sandwich",
+                price: "$3.00",
+                image: "abc.png",
+            },
+            {
+                name: "Veg Cheese Grilled Sandwich",
+                price: "$3.00",
+                image: "abc.png",
+            },
+            {
+                name: "Paneer Masala Grilled Sandwich",
+                price: "$3.00",
+                image: "abc.png",
+            },
         ],
     },
     { id: "panini", label: "Panini", items: [] },
@@ -87,8 +140,8 @@ const menuData: MenuSection[] = [
         id: "pizza",
         label: "Pizza",
         items: [
-            { name: "Fondue Pizza - Cheese", price: "$3.00" },
-            { name: "Fondue Pizza - Veg", price: "$3.00" },
+            { name: "Fondue Pizza - Cheese", price: "$3.00", image: "abc.png" },
+            { name: "Fondue Pizza - Veg", price: "$3.00", image: "abc.png" },
         ],
     },
     {
@@ -99,20 +152,33 @@ const menuData: MenuSection[] = [
                 title: "Avocado Toast",
                 note: "(Sourdough bread)",
                 items: [
-                    { name: "Avocado Toast", price: "$3.00" },
-                    { name: "Veg. Avocado Toast", price: "$3.00" },
-                    { name: "Avocado and Burrata Toast", price: "$3.00" },
+                    { name: "Avocado Toast", price: "$3.00", image: "abc.png" },
+                    {
+                        name: "Veg. Avocado Toast",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
+                    {
+                        name: "Avocado and Burrata Toast",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
                 ],
             },
             {
                 title: "Garlic Bread",
                 items: [
-                    { name: "Garlic Bread", price: "$3.00" },
-                    { name: "Cheese Garlic Bread", price: "$3.00" },
+                    { name: "Garlic Bread", price: "$3.00", image: "abc.png" },
+                    {
+                        name: "Cheese Garlic Bread",
+                        price: "$3.00",
+                        image: "abc.png",
+                    },
                     {
                         name: "Masala Garlic Bread",
                         price: "$3.00",
                         description: "Green marchi, leela dhana, white onion",
+                        image: "abc.png",
                     },
                 ],
             },
@@ -122,43 +188,47 @@ const menuData: MenuSection[] = [
         id: "bakery",
         label: "Bakery (Coffee Sides)",
         items: [
-            { name: "Nutella Bread", price: "$3.00" },
-            { name: "Banana Bread", price: "$3.00" },
-            { name: "Butter Croissant", price: "$3.00" },
-            { name: "Chocolate Croissant", price: "$3.00" },
+            { name: "Nutella Bread", price: "$3.00", image: "abc.png" },
+            { name: "Banana Bread", price: "$3.00", image: "abc.png" },
+            { name: "Butter Croissant", price: "$3.00", image: "abc.png" },
+            { name: "Chocolate Croissant", price: "$3.00", image: "abc.png" },
         ],
     },
     {
         id: "bagels",
         label: "Bagels",
         items: [
-            { name: "Plain Bagel", price: "$3.00" },
-            { name: "Everything Bagel", price: "$3.00" },
-            { name: "Asiago Bagel", price: "$3.00" },
+            { name: "Plain Bagel", price: "$3.00", image: "abc.png" },
+            { name: "Everything Bagel", price: "$3.00", image: "abc.png" },
+            { name: "Asiago Bagel", price: "$3.00", image: "abc.png" },
         ],
     },
     {
         id: "house-special",
         label: "House Special",
         items: [
-            { name: "Hummus Toast", price: "$3.00" },
-            { name: "Margherita Caprese Flatbread", price: "$3.00" },
+            { name: "Hummus Toast", price: "$3.00", image: "abc.png" },
+            {
+                name: "Margherita Caprese Flatbread",
+                price: "$3.00",
+                image: "abc.png",
+            },
         ],
     },
     {
         id: "dessert",
         label: "Dessert",
         items: [
-            { name: "Affogato", price: "$3.00" },
-            { name: "Shibuya Toast", price: "$3.00" },
+            { name: "Affogato", price: "$3.00", image: "abc.png" },
+            { name: "Shibuya Toast", price: "$3.00", image: "abc.png" },
         ],
     },
     {
         id: "breakfast",
         label: "Breakfast Items",
         items: [
-            { name: "Plain Pancake", price: "$3.00" },
-            { name: "Waffle", price: "$3.00" },
+            { name: "Plain Pancake", price: "$3.00", image: "abc.png" },
+            { name: "Waffle", price: "$3.00", image: "abc.png" },
         ],
     },
 ];
@@ -182,6 +252,10 @@ export default function App() {
     const [activeSection, setActiveSection] = useState("hot-beverages");
     const [isScrolled, setIsScrolled] = useState(false);
     const [showBackToTop, setShowBackToTop] = useState(false);
+    const [lightboxImage, setLightboxImage] = useState<{
+        image: string;
+        name: string;
+    } | null>(null);
     const sectionsRef = useRef<{ [key: string]: HTMLElement }>({});
 
     useEffect(() => {
@@ -199,7 +273,9 @@ export default function App() {
             }
         };
 
-        window.addEventListener("scroll", handleScroll, { passive: true });
+        window.addEventListener("scroll", handleScroll, {
+            passive: true,
+        });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -316,7 +392,11 @@ export default function App() {
                             }
                         >
                             {section.items?.map((item, idx) => (
-                                <MenuItem key={idx} {...item} />
+                                <MenuItem
+                                    key={idx}
+                                    {...item}
+                                    setLightboxImage={setLightboxImage}
+                                />
                             ))}
 
                             {section.subcategories?.map((subcategory, idx) => (
@@ -336,6 +416,9 @@ export default function App() {
                                                     key={itemIdx}
                                                     {...item}
                                                     isSubItem
+                                                    setLightboxImage={
+                                                        setLightboxImage
+                                                    }
                                                 />
                                             ),
                                         )}
@@ -411,6 +494,15 @@ export default function App() {
                     <path d="M16.24 7.76l2.83-2.83" />
                 </svg>
             </button>
+
+            {/* Image Lightbox */}
+            {lightboxImage && (
+                <Imagebox
+                    image={lightboxImage.image}
+                    name={lightboxImage.name}
+                    onClose={() => setLightboxImage(null)}
+                />
+            )}
         </div>
     );
 }
