@@ -5,6 +5,7 @@ interface MenuItemProps {
     price?: string;
     image: string;
     setLightboxImage?: (data: { image: string; name: string }) => void;
+    onError?: () => void;
 }
 
 export function MenuItem({
@@ -23,7 +24,7 @@ export function MenuItem({
 
     return (
         <div
-            className={`${isSubItem ? "py-1.5" : "py-3"} flex gap-3 items-center`}
+            className={`${isSubItem ? "py-2" : "py-3"} flex gap-3 items-center`}
         >
             {/* Image */}
             <div
@@ -33,6 +34,9 @@ export function MenuItem({
                 <img
                     src={image}
                     alt={name}
+                    onError={(e) => {
+                        e.currentTarget.src = "/default.png";
+                    }}
                     className="w-full h-full object-cover rounded-lg border border-[#c9b8a3]/30 hover:opacity-80 transition-opacity active:scale-95 transition-transform"
                 />
             </div>
@@ -55,7 +59,9 @@ export function MenuItem({
                     )}
                 </div>
                 {description && (
-                    <p className="text-sm text-[#7d6b5a] mt-1">{description}</p>
+                    <p className="text-xs text-[#7d6b5a] mt-1 italic">
+                        {description}
+                    </p>
                 )}
             </div>
         </div>

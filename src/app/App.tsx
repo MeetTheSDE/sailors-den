@@ -2,251 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { MenuItem } from "./components/MenuItem";
 import { Imagebox } from "./components/ImageBox";
 import { SectionNav } from "./components/SectionNav";
-
-// --- Interfaces ---
-interface MenuItemData {
-    name: string;
-    price: string;
-    description?: string;
-    image: string;
-}
-
-interface MenuSubCategory {
-    title: string;
-    note?: string;
-    items: MenuItemData[];
-}
-
-interface MenuSection {
-    id: string;
-    label: string;
-    note?: string;
-    items?: MenuItemData[];
-    subcategories?: MenuSubCategory[];
-}
-
-// --- Data ---
-const menuData: MenuSection[] = [
-    {
-        id: "hot-beverages",
-        label: "Hot Beverages",
-        items: [{ name: "Hot Chocolate", price: "$3.00", image: "abc.png" }],
-        subcategories: [
-            {
-                title: "Espresso",
-                items: [
-                    { name: "Doppio", price: "$3.00", image: "abc.png" },
-                    { name: "Lungo", price: "$3.00", image: "abc.png" },
-                    { name: "Ristretto", price: "$3.00", image: "abc.png" },
-                    {
-                        name: "Cafe Americano",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                ],
-            },
-            {
-                title: "Latte",
-                items: [
-                    { name: "Cafe Latte", price: "$3.00", image: "abc.png" },
-                    {
-                        name: "Pistachio Latte",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                    {
-                        name: "Caramel Brulee Latte",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                    {
-                        name: "Gingerbread Latte",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                    { name: "Vanilla Latte", price: "$3.00", image: "abc.png" },
-                    {
-                        name: "Cinnamon Dolce Latte",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                    {
-                        name: "Pumpkin Spice Latte",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: "cold-beverages",
-        label: "Cold Beverages",
-        note: "Everything in hot can be made iced",
-        items: [
-            {
-                name: "Strawberry Matcha Latte",
-                price: "$3.00",
-                image: "abc.png",
-            },
-        ],
-    },
-    {
-        id: "appetizer",
-        label: "Appetizer",
-        items: [
-            {
-                name: "Homemade Salsa",
-                price: "$3.00",
-                description: "served with chips",
-                image: "abc.png",
-            },
-            {
-                name: "Spicy Queso (Cheese) Nachos",
-                price: "$3.00",
-                image: "abc.png",
-            },
-            { name: "Veg Loaded Nachos", price: "$3.00", image: "abc.png" },
-        ],
-    },
-    {
-        id: "sandwich",
-        label: "Sandwich",
-        items: [
-            {
-                name: "Cheese Grilled Sandwich",
-                price: "$3.00",
-                image: "abc.png",
-            },
-            {
-                name: "Double Cheese Grilled Sandwich",
-                price: "$3.00",
-                image: "abc.png",
-            },
-            {
-                name: "Veg Cheese Grilled Sandwich",
-                price: "$3.00",
-                image: "abc.png",
-            },
-            {
-                name: "Paneer Masala Grilled Sandwich",
-                price: "$3.00",
-                image: "abc.png",
-            },
-        ],
-    },
-    { id: "panini", label: "Panini", items: [] },
-    {
-        id: "pizza",
-        label: "Pizza",
-        items: [
-            { name: "Fondue Pizza - Cheese", price: "$3.00", image: "abc.png" },
-            { name: "Fondue Pizza - Veg", price: "$3.00", image: "abc.png" },
-        ],
-    },
-    {
-        id: "garlic-bread",
-        label: "Avocado Toast & Garlic Bread",
-        subcategories: [
-            {
-                title: "Avocado Toast",
-                note: "(Sourdough bread)",
-                items: [
-                    { name: "Avocado Toast", price: "$3.00", image: "abc.png" },
-                    {
-                        name: "Veg. Avocado Toast",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                    {
-                        name: "Avocado and Burrata Toast",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                ],
-            },
-            {
-                title: "Garlic Bread",
-                items: [
-                    { name: "Garlic Bread", price: "$3.00", image: "abc.png" },
-                    {
-                        name: "Cheese Garlic Bread",
-                        price: "$3.00",
-                        image: "abc.png",
-                    },
-                    {
-                        name: "Masala Garlic Bread",
-                        price: "$3.00",
-                        description: "Green marchi, leela dhana, white onion",
-                        image: "abc.png",
-                    },
-                ],
-            },
-        ],
-    },
-    {
-        id: "bakery",
-        label: "Bakery (Coffee Sides)",
-        items: [
-            { name: "Nutella Bread", price: "$3.00", image: "abc.png" },
-            { name: "Banana Bread", price: "$3.00", image: "abc.png" },
-            { name: "Butter Croissant", price: "$3.00", image: "abc.png" },
-            { name: "Chocolate Croissant", price: "$3.00", image: "abc.png" },
-        ],
-    },
-    {
-        id: "bagels",
-        label: "Bagels",
-        items: [
-            { name: "Plain Bagel", price: "$3.00", image: "abc.png" },
-            { name: "Everything Bagel", price: "$3.00", image: "abc.png" },
-            { name: "Asiago Bagel", price: "$3.00", image: "abc.png" },
-        ],
-    },
-    {
-        id: "house-special",
-        label: "House Special",
-        items: [
-            { name: "Hummus Toast", price: "$3.00", image: "abc.png" },
-            {
-                name: "Margherita Caprese Flatbread",
-                price: "$3.00",
-                image: "abc.png",
-            },
-        ],
-    },
-    {
-        id: "dessert",
-        label: "Dessert",
-        items: [
-            { name: "Affogato", price: "$3.00", image: "abc.png" },
-            { name: "Shibuya Toast", price: "$3.00", image: "abc.png" },
-        ],
-    },
-    {
-        id: "breakfast",
-        label: "Breakfast Items",
-        items: [
-            { name: "Plain Pancake", price: "$3.00", image: "abc.png" },
-            { name: "Waffle", price: "$3.00", image: "abc.png" },
-        ],
-    },
-];
-
-const sections = [
-    { id: "hot-beverages", label: "Hot Beverages" },
-    { id: "cold-beverages", label: "Cold Beverages" },
-    { id: "appetizer", label: "Appetizer" },
-    { id: "sandwich", label: "Sandwich" },
-    { id: "panini", label: "Panini" },
-    { id: "pizza", label: "Pizza" },
-    { id: "garlic-bread", label: "Garlic Bread" },
-    { id: "bakery", label: "Bakery" },
-    { id: "bagels", label: "Bagels" },
-    { id: "house-special", label: "House Special" },
-    { id: "dessert", label: "Dessert" },
-    { id: "breakfast", label: "Breakfast" },
-];
+import { menuData, sections } from "./components/Data";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
 export default function App() {
     const [activeSection, setActiveSection] = useState("hot-beverages");
@@ -364,7 +122,7 @@ export default function App() {
             </header>
 
             {/* --- 3. MAIN MENU --- */}
-            <main className="max-w-4xl mx-auto px-4 py-8 pb-20">
+            <main className="max-w-4xl mx-auto px-4 py-8 pb-10">
                 {menuData.map((section) => (
                     <section
                         key={section.id}
@@ -374,57 +132,68 @@ export default function App() {
                         }}
                         className="mb-16 scroll-mt-28"
                     >
-                        <h2 className="text-3xl font-serif text-[#5c4a3a] mb-8 text-center">
+                        <h2 className="text-3xl font-serif text-[#5c4a3a] mb-6 text-center">
                             {section.label}
                         </h2>
 
                         {section.note && (
-                            <p className="text-[#7d6b5a] text-center mb-6 italic">
+                            <p className="text-[#7d6b5a] text-xs text-center mb- italic">
                                 {section.note}
                             </p>
                         )}
 
-                        <div
-                            className={
-                                section.subcategories
-                                    ? "space-y-6"
-                                    : "space-y-3"
-                            }
-                        >
-                            {section.items?.map((item, idx) => (
-                                <MenuItem
-                                    key={idx}
-                                    {...item}
-                                    setLightboxImage={setLightboxImage}
-                                />
-                            ))}
+                        <div className="mt-2">
+                            {section.content.map((entry, idx) => {
+                                if (entry.type === "item") {
+                                    const imageName =
+                                        entry.data.name.replace(/\s+/g, "") +
+                                        ".png";
+                                    return (
+                                        <MenuItem
+                                            key={idx}
+                                            {...entry.data}
+                                            image={imageName}
+                                            setLightboxImage={setLightboxImage}
+                                        />
+                                    );
+                                }
 
-                            {section.subcategories?.map((subcategory, idx) => (
-                                <div key={idx} className="mt-6">
-                                    <h3 className="text-xl text-[#6d5a47] mb-3 font-medium">
-                                        {subcategory.title}
-                                        {subcategory.note && (
-                                            <span className="text-sm text-[#7d6b5a] font-normal italic ml-2">
-                                                {subcategory.note}
-                                            </span>
-                                        )}
-                                    </h3>
-                                    <div className="space-y-2 pl-4">
-                                        {subcategory.items.map(
-                                            (item, itemIdx) => (
-                                                <MenuItem
-                                                    key={itemIdx}
-                                                    {...item}
-                                                    isSubItem
-                                                    setLightboxImage={
-                                                        setLightboxImage
-                                                    }
-                                                />
-                                            ),
-                                        )}
+                                // Subcategory
+                                return (
+                                    <div key={idx} className="mt-4 mb-4">
+                                        <h3 className="text-xl text-[#6d5a47] mb-2 font-medium">
+                                            {entry.data.title}
+                                            {entry.data.note && (
+                                                <span className="text-sm text-[#7d6b5a] font-normal italic ml-2">
+                                                    {entry.data.note}
+                                                </span>
+                                            )}
+                                        </h3>
+                                        <div className="pl-6">
+                                            {entry.data.items.map(
+                                                (item, itemIdx) => {
+                                                    const imageName =
+                                                        item.name.replace(
+                                                            /\s+/g,
+                                                            "",
+                                                        ) + ".png";
+                                                    return (
+                                                        <MenuItem
+                                                            key={itemIdx}
+                                                            {...item}
+                                                            image={imageName}
+                                                            isSubItem
+                                                            setLightboxImage={
+                                                                setLightboxImage
+                                                            }
+                                                        />
+                                                    );
+                                                },
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     </section>
                 ))}
@@ -503,6 +272,8 @@ export default function App() {
                     onClose={() => setLightboxImage(null)}
                 />
             )}
+            <Analytics />
+            <SpeedInsights />
         </div>
     );
 }
