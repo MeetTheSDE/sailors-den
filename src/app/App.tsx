@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { MenuItem } from "./components/MenuItem";
 import { Imagebox } from "./components/ImageBox";
 import { SectionNav } from "./components/SectionNav";
-import { menuData, sections } from "./components/Data";
+import { useMenuData } from "./hooks/useMenuData";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -15,25 +15,19 @@ export default function App() {
         name: string;
     } | null>(null);
     const sectionsRef = useRef<{ [key: string]: HTMLElement }>({});
+    const { menuData, sections, loading, error } = useMenuData();
 
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
-
-            // Show Ship Wheel button
             setShowBackToTop(currentScrollY > 400);
-
-            // Toggle the banner appearance (e.g., after 120px)
             if (currentScrollY > 120) {
                 setIsScrolled(true);
             } else {
                 setIsScrolled(false);
             }
         };
-
-        window.addEventListener("scroll", handleScroll, {
-            passive: true,
-        });
+        window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -61,34 +55,26 @@ export default function App() {
         });
 
         return () => observer.disconnect();
-    }, []);
+    }, [menuData]);
 
     const scrollToSection = (id: string) => {
         const section = sectionsRef.current[id];
         if (section) {
-            // Adjust navHeight based on banner height (approx 120px when banner is active)
             const navHeight = isScrolled ? 120 : 129;
             const elementPosition = section.getBoundingClientRect().top;
             const offsetPosition =
                 elementPosition + window.pageYOffset - navHeight;
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: "smooth",
-            });
+            window.scrollTo({ top: offsetPosition, behavior: "smooth" });
         }
     };
 
     const scrollToTop = () => {
-        window.scrollTo({
-            top: 0,
-            behavior: "smooth",
-        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     return (
         <div className="min-h-screen bg-[#f5f1e8]">
-            {/* --- 1. LOGO AREA (Only the Image scrolls away) --- */}
+            {/* --- 1. LOGO AREA --- */}
             <div className="max-w-4xl mx-auto px-4 pt-1 text-center">
                 <div className="flex flex-col items-center gap-3">
                     <div className="w-30 h-30 flex items-center justify-center">
@@ -97,9 +83,8 @@ export default function App() {
                 </div>
             </div>
 
-            {/* --- 2. STICKY HEADER (Contains the Title + Nav) --- */}
+            {/* --- 2. STICKY HEADER --- */}
             <header className="sticky top-0 z-50 bg-[#f5f1e8]/95 backdrop-blur-sm border-b border-[#8b6f47]/20">
-                {/* THE NAME: This starts below the logo but stays when it hits the top */}
                 <div className="flex justify-center items-center py-3 transition-all duration-300">
                     <h1
                         onClick={scrollToTop}
@@ -111,7 +96,6 @@ export default function App() {
                     </h1>
                 </div>
 
-                {/* NAVBAR: Stays pinned right below the name */}
                 <div className="bg-[#f5f1e8]">
                     <SectionNav
                         sections={sections}
@@ -123,80 +107,99 @@ export default function App() {
 
             {/* --- 3. MAIN MENU --- */}
             <main className="max-w-4xl mx-auto px-4 py-8 pb-10">
-                {menuData.map((section) => (
-                    <section
-                        key={section.id}
-                        id={section.id}
-                        ref={(el) => {
-                            if (el) sectionsRef.current[section.id] = el;
-                        }}
-                        className="mb-16 scroll-mt-28"
-                    >
-                        <h2 className="text-3xl font-serif text-[#5c4a3a] mb-6 text-center">
-                            {section.label}
-                        </h2>
+                {loading && (
+                    <p className="text-center text-[#7d6b5a] italic py-20">
+                        Loading menu...
+                    </p>
+                )}
+                {error && (
+                    <p className="text-center text-red-400 italic py-4">
+                        {error}
+                    </p>
+                )}
+                {!loading &&
+                    menuData.map((section) => (
+                        <section
+                            key={section.id}
+                            id={section.id}
+                            ref={(el) => {
+                                if (el) sectionsRef.current[section.id] = el;
+                            }}
+                            className="mb-16 scroll-mt-28"
+                        >
+                            <h2 className="text-3xl font-serif text-[#5c4a3a] mb-6 text-center">
+                                {section.label}
+                            </h2>
 
-                        {section.note && (
-                            <p className="text-[#7d6b5a] text-xs text-center mb- italic">
-                                {section.note}
-                            </p>
-                        )}
+                            {section.note && (
+                                <p className="text-[#7d6b5a] text-xs text-center mb- italic">
+                                    {section.note}
+                                </p>
+                            )}
 
-                        <div className="mt-2">
-                            {section.content.map((entry, idx) => {
-                                if (entry.type === "item") {
-                                    const imageName =
-                                        entry.data.name.replace(/\s+/g, "") +
-                                        ".png";
+                            <div className="mt-2">
+                                {section.content.map((entry, idx) => {
+                                    if (entry.type === "item") {
+                                        const imageName = entry.data.hasImage
+                                            ? entry.data.name.replace(
+                                                  /\s+/g,
+                                                  "",
+                                              ) + ".png"
+                                            : "default.png";
+                                        return (
+                                            <MenuItem
+                                                key={idx}
+                                                {...entry.data}
+                                                image={imageName}
+                                                setLightboxImage={
+                                                    setLightboxImage
+                                                }
+                                            />
+                                        );
+                                    }
+
                                     return (
-                                        <MenuItem
-                                            key={idx}
-                                            {...entry.data}
-                                            image={imageName}
-                                            setLightboxImage={setLightboxImage}
-                                        />
-                                    );
-                                }
-
-                                // Subcategory
-                                return (
-                                    <div key={idx} className="mt-4 mb-4">
-                                        <h3 className="text-xl text-[#6d5a47] mb-2 font-medium">
-                                            {entry.data.title}
-                                            {entry.data.note && (
-                                                <span className="text-sm text-[#7d6b5a] font-normal italic ml-2">
-                                                    {entry.data.note}
-                                                </span>
-                                            )}
-                                        </h3>
-                                        <div className="pl-6">
-                                            {entry.data.items.map(
-                                                (item, itemIdx) => {
-                                                    const imageName =
-                                                        item.name.replace(
-                                                            /\s+/g,
-                                                            "",
-                                                        ) + ".png";
-                                                    return (
-                                                        <MenuItem
-                                                            key={itemIdx}
-                                                            {...item}
-                                                            image={imageName}
-                                                            isSubItem
-                                                            setLightboxImage={
-                                                                setLightboxImage
-                                                            }
-                                                        />
-                                                    );
-                                                },
-                                            )}
+                                        <div key={idx} className="mt-4 mb-4">
+                                            <h3 className="text-xl text-[#6d5a47] mb-2 font-medium">
+                                                {entry.data.title}
+                                                {entry.data.note && (
+                                                    <span className="text-sm text-[#7d6b5a] font-normal italic ml-2">
+                                                        {entry.data.note}
+                                                    </span>
+                                                )}
+                                            </h3>
+                                            <div className="pl-6">
+                                                {entry.data.items.map(
+                                                    (item, itemIdx) => {
+                                                        const imageName =
+                                                            item.hasImage
+                                                                ? item.name.replace(
+                                                                      /\s+/g,
+                                                                      "",
+                                                                  ) + ".png"
+                                                                : "default.png";
+                                                        return (
+                                                            <MenuItem
+                                                                key={itemIdx}
+                                                                {...item}
+                                                                image={
+                                                                    imageName
+                                                                }
+                                                                isSubItem
+                                                                setLightboxImage={
+                                                                    setLightboxImage
+                                                                }
+                                                            />
+                                                        );
+                                                    },
+                                                )}
+                                            </div>
                                         </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    </section>
-                ))}
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    ))}
             </main>
 
             <footer className="border-t-2 border-[#c9b8a3]/50 bg-gradient-to-b from-[#f5f1e8] to-[#ebe5d8] py-12">

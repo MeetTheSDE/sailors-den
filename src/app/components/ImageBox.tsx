@@ -35,12 +35,11 @@ export function Imagebox({ image, name, onClose }: ImageLightboxProps) {
 
     return (
         <div
-            className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-200"
+            className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-100"
             onClick={onClose}
         >
             {/* Blurred backdrop */}
-            <div className="absolute inset-0 bg-[#5c4a3a]/80 backdrop-blur-md" />
-
+            <div className="absolute inset-0 bg-[#5c4a3a]/80 backdrop-blur-xs" />
             {/* Enlarged image */}
             <div
                 className="relative z-10 max-w-2xl w-full animate-in zoom-in-95 duration-300"
