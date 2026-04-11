@@ -50,22 +50,23 @@ function parseSheetToMenuData(rows: string[][]): MenuSection[] {
             section.content.push({ type: "item", data: itemData });
         } else if (type === "subcategory_item") {
             let subcatEntry = section.content.find(
-                (c): c is { type: "subcategory"; data: any } =>
+                (c): c is Extract<MenuContent, { type: "subcategory" }> =>
                     c.type === "subcategory" &&
                     c.data.title === subcategoryTitle,
             );
 
             if (!subcatEntry) {
-                const newEntry: MenuContent = {
-                    type: "subcategory",
-                    data: {
-                        title: subcategoryTitle,
-                        note: subcategoryNote || undefined,
-                        items: [],
-                    },
-                };
+                const newEntry: Extract<MenuContent, { type: "subcategory" }> =
+                    {
+                        type: "subcategory",
+                        data: {
+                            title: subcategoryTitle,
+                            note: subcategoryNote || undefined,
+                            items: [],
+                        },
+                    };
                 section.content.push(newEntry);
-                subcatEntry = newEntry as { type: "subcategory"; data: any };
+                subcatEntry = newEntry;
             }
 
             subcatEntry.data.items.push(itemData);
