@@ -221,14 +221,24 @@ export default function App() {
                             <div className="h-px w-20 bg-gradient-to-l from-transparent to-[#8b6f47]/30"></div>
                         </div>
                         <div className="space-y-2 text-[#7d6b5a]">
-                            <p className="text-base">
-                                123 Harbor Street, Coastal Bay, CB 12345
-                            </p>
-                            <p className="text-base">📞 (555) 123-4567</p>
+                            <a
+                                href="https://www.google.com/maps/place/AR+Mall/@21.2351524,72.8728581,20.6z/data=!4m6!3m5!1s0x3be04f004fe7ca07:0x61c965e267fd5dca!8m2!3d21.2350445!4d72.8730323!16s%2Fg%2F11yyz4cdnj?entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                306/307, AR Mall, Mota Varachha, Surat, Gujarat
+                                394104
+                            </a>
+                            <a
+                                href="tel:+918980707798"
+                                className="block text-base mt-3"
+                            >
+                                📞 (+91) 89807-07798
+                            </a>
                         </div>
                         <div className="mt-6 pt-6 border-t border-[#c9b8a3]/30">
-                            <p className="text-sm text-[#8b6f47]">
-                                Open Daily • 7:00 AM - 8:00 PM
+                            <p className="text-m text-[#8b6f47]">
+                                Open Daily • 11:00 AM - 11:00 PM
                             </p>
                         </div>
                     </div>
