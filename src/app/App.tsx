@@ -201,6 +201,11 @@ export default function App() {
                         </section>
                     ))}
             </main>
+            <div className="max-w-4xl mx-auto px-4 pb-6 text-left">
+                <p className="text-sm text-[#7d6b5a] italic">
+                    * Taxes are not included in the listed prices
+                </p>
+            </div>
 
             <footer className="border-t-2 border-[#c9b8a3]/50 bg-gradient-to-b from-[#f5f1e8] to-[#ebe5d8] py-12">
                 <div className="max-w-4xl mx-auto px-4">
@@ -222,19 +227,22 @@ export default function App() {
                         </div>
                         <div className="space-y-2 text-[#7d6b5a]">
                             <a
-                                href="https://www.google.com/maps/place/AR+Mall/@21.2351524,72.8728581,20.6z/data=!4m6!3m5!1s0x3be04f004fe7ca07:0x61c965e267fd5dca!8m2!3d21.2350445!4d72.8730323!16s%2Fg%2F11yyz4cdnj?entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D"
+                                href="https://www.google.com/maps/place/Sailor's+Den+Cafe/@21.2351524,72.8728581,20z/data=!4m14!1m7!3m6!1s0x3be04f004fe7ca07:0x61c965e267fd5dca!2sAR+Mall!8m2!3d21.2350445!4d72.8730323!16s%2Fg%2F11yyz4cdnj!3m5!1s0x3be04fcc3bafab0f:0x95df7bb455165625!8m2!3d21.2353018!4d72.8728817!16s%2Fg%2F11z4y436n2?entry=ttu&g_ep=EgoyMDI2MDQwOC4wIKXMDSoASAFQAw%3D%3D"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 306/307, AR Mall, Mota Varachha, Surat, Gujarat
                                 394104
                             </a>
-                            <a
-                                href="tel:+918980707798"
-                                className="block text-base mt-3"
-                            >
-                                📞 (+91) 89807-07798
-                            </a>
+
+                            <div className="mt-3">
+                                <a
+                                    href="tel:+918980707798"
+                                    className="text-base"
+                                >
+                                    📞 (+91) 89807-07798
+                                </a>
+                            </div>
                         </div>
                         <div className="mt-6 pt-6 border-t border-[#c9b8a3]/30">
                             <p className="text-m text-[#8b6f47]">
