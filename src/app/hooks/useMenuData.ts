@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
 import { MenuSection, MenuContent, MenuItemData } from "../components/Data";
 
-// ─────────────────────────────────────────────
-// Paste your values here:
-// ─────────────────────────────────────────────
-const SHEET_ID = "1qHLtUguPMZjHXtnIFIILK_pZYTMpCEAgNwCrpVKggks";
-const API_KEY = "AIzaSyA8JBB15HU82MU9MTUgSrx-5nCr3ihVyVo";
-const SHEET_NAME = "menu";
-// ─────────────────────────────────────────────
+const SHEET_ID = import.meta.env.VITE_SHEET_ID;
+const API_KEY = import.meta.env.VITE_GOOGLE_API_KEY;
+const SHEET_NAME = import.meta.env.VITE_SHEET_NAME;
 
 const SHEETS_URL = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${SHEET_NAME}?key=${API_KEY}`;
 

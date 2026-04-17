@@ -8,15 +8,10 @@ interface ImageLightboxProps {
 
 export function Imagebox({ image, name, onClose }: ImageLightboxProps) {
     useEffect(() => {
-        // Prevent scrolling when lightbox is open
         document.body.style.overflow = "hidden";
-
-        // Close on scroll
         const handleScroll = () => {
             onClose();
         };
-
-        // Close on escape key
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === "Escape") {
                 onClose();
@@ -38,9 +33,7 @@ export function Imagebox({ image, name, onClose }: ImageLightboxProps) {
             className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-in fade-in duration-100"
             onClick={onClose}
         >
-            {/* Blurred backdrop */}
             <div className="absolute inset-0 bg-[#5c4a3a]/80 backdrop-blur-xs" />
-            {/* Enlarged image */}
             <div
                 className="relative z-10 max-w-2xl w-full animate-in zoom-in-95 duration-300"
                 onClick={(e) => e.stopPropagation()}
@@ -55,7 +48,6 @@ export function Imagebox({ image, name, onClose }: ImageLightboxProps) {
                 </p>
             </div>
 
-            {/* Close hint */}
             <div className="absolute top-4 right-4 text-[#f5f1e8] text-sm bg-[#5c4a3a]/50 px-3 py-1 rounded-full backdrop-blur-sm">
                 Tap anywhere to close
             </div>

@@ -1,4 +1,3 @@
-// --- Interfaces ---
 export interface MenuItemData {
     name: string;
     price: string;
