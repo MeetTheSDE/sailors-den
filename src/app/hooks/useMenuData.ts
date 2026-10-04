@@ -38,6 +38,8 @@ function parseSheetToMenuData(rows: string[][]): MenuSection[] {
         const itemData: MenuItemData = {
             name: get("name"),
             price: get("price"),
+            hot_price: get("hot_price"),
+            cold_price: get("cold_price"),
             description: get("description") || undefined,
             hasImage: get("has_image").toUpperCase() === "TRUE" || undefined,
         };
