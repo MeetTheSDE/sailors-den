@@ -218,7 +218,7 @@ export default function App() {
                                 <div
                                     className="sticky z-40 bg-[#f5f1e8] border-b-2 border-[#c9b8a3]"
                                     style={{
-                                        top: isScrolled ? "105px" : "125px",
+                                        top: isScrolled ? "115px" : "125px",
                                     }}
                                 >
                                     <div className="flex gap-3 items-center py-3">
